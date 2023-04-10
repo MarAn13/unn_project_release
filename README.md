@@ -1,4 +1,4 @@
-forked from https://github.com/uf-robopi/UDepth/tree/master/CPD
+forked from https://github.com/uf-robopi/UDepth
 with some file changes
 
 #### SETUP

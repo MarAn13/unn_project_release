@@ -4,6 +4,7 @@ import argparse
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
+from skimage.metrics import structural_similarity
 # local libs
 from model.udepth import *
 from utils.data import *
@@ -27,16 +28,23 @@ def get_depth(image):
 	
 	
 def comp_images(path_1, path_2):
-  img_1 = cv2.imread(path_1)
-  img_1 = cv2.cvtColor(img_1, cv2.COLOR_BGR2RGB)
-  img_2 = cv2.imread(path_2)
-  img_2 = cv2.cvtColor(img_2, cv2.COLOR_BGR2RGB)
   try:
+    # Load images as grayscale
+    img_1 = cv2.imread(path_1, cv2.COLOR_BGR2RGB)
+    img_2 = cv2.imread(path_2, cv2.COLOR_BGR2RGB)
     if img_1.shape != img_2.shape:
       raise BaseException('ERROR! Images shapes do not match!')
-    sum_id = np.sum(img_1 == img_2)
-    percent = sum_id / np.product(img_1.shape) * 100
-    return percent
+
+    # Compute SSIM between the two images
+    (score, diff) = structural_similarity(img_1, img_2, channel_axis=2, full=True)
+
+    # The diff image contains the actual image differences between the two images
+    # and is represented as a floating point data type in the range [0,1] 
+    # so we must convert the array to 8-bit unsigned integers in the range
+    # [0,255] image1 we can use it with OpenCV
+    diff = (diff * 255).astype("uint8")
+    cv2.imwrite('diff.png', diff)
+    return score * 100
   except BaseException as e:
     print(e)
     return None

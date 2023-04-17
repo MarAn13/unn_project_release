@@ -36,3 +36,11 @@ python check.py
 ```
 docker run wintersnezh/unn_udepth_test
 ```
+To get difference map
+```
+docker cp <container_id>:app/diff.png <local_path>
+```
+To get resulting images
+```
+docker cp <container_id>:app/data/output <local_path>
+```

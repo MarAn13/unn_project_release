@@ -28,7 +28,7 @@ docker pull wintersnezh/unn_udepth_test
 ```
 #### :rocket: TESTING
 ##### With python
-run check.py located in the root (UDepth) folder
+run check.py located in the app folder
 ```
 python check.py
 ```
